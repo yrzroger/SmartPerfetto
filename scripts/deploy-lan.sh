@@ -159,7 +159,9 @@ validate_address() {
 validate_port() {
   local port="$1"
   [[ "$port" =~ ^[0-9]+$ ]] || die "port must be a number, got '$port'"
-  [ "$port" -ge 1 ] && [ "$port" -le 65535 ] || die "port must be in 1..65535, got '$port'"
+  if [ "$port" -lt 1 ] || [ "$port" -gt 65535 ]; then
+    die "port must be in 1..65535, got '$port'"
+  fi
 }
 
 generate_secret() {
