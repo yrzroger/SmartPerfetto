@@ -148,6 +148,25 @@ Technical Information:
         }
       }
 
+      // Send an unauthenticated visitor straight to the provider's login form
+      // instead of stopping on a "click to log in" card. The sessionStorage
+      // marker bounds it to one attempt per minute, so a rejected cookie cannot
+      // turn into an endless redirect loop; the second pass falls back to the
+      // card below.
+      const OIDC_REDIRECT_MARKER = 'smartperfettoOidcLoginRedirectAt';
+
+      function redirectToOidcLogin(loginUrl) {
+        try {
+          const previous = Number(window.sessionStorage.getItem(OIDC_REDIRECT_MARKER) || 0);
+          if (previous && Date.now() - previous < 60 * 1000) return false;
+          window.sessionStorage.setItem(OIDC_REDIRECT_MARKER, String(Date.now()));
+        } catch (_) {
+          return false;
+        }
+        window.location.replace(loginUrl);
+        return true;
+      }
+
       function setOidcRuntimeMode(enabled) {
         runtimeConfig.oidcEnabled = enabled;
         try {
@@ -361,6 +380,13 @@ Technical Information:
           return;
         }
         if (result.kind === 'ready') {
+          // A completed login resets the loop bound, so a later logout still
+          // gets an automatic redirect.
+          try {
+            window.sessionStorage.removeItem(OIDC_REDIRECT_MARKER);
+          } catch (_) {
+            // A blocked storage API only disables the loop bound, not the login.
+          }
           try {
             window.__SMARTPERFETTO_AUTH_SESSION__ = result.session;
           } catch (_) {
@@ -371,6 +397,7 @@ Technical Information:
         }
         if (result.kind === 'login') {
           const loginUrl = buildOidcLoginUrl(backendUrl);
+          if (loginUrl && redirectToOidcLogin(loginUrl)) return;
           renderGate(
             '需要登录 SmartPerfetto',
             '请先完成企业单点登录，登录成功后才能打开 Perfetto 分析页面。',

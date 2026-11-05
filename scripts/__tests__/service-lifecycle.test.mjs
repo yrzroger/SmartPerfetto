@@ -29,6 +29,11 @@ function runBash(body, options = {}) {
   });
 }
 
+function portHasListener(port) {
+  const result = spawnSync('ss', ['-ltnH', `sport = :${port}`], {encoding: 'utf8'});
+  return result.status === 0 && result.stdout.trim().length > 0;
+}
+
 function childPids(pid) {
   const result = spawnSync('pgrep', ['-P', String(pid)], {encoding: 'utf8'});
   if (result.status !== 0) return [];
@@ -207,10 +212,7 @@ posixTest('explicit force stop removes a listener and verifies the port is clean
     {stdio: 'ignore'},
   );
   t.after(() => listener.kill('SIGKILL'));
-  await waitUntil(() => {
-    const result = spawnSync('lsof', ['-ti', `tcp:${port}`, '-sTCP:LISTEN']);
-    return result.status === 0;
-  });
+  await waitUntil(() => portHasListener(port));
 
   const stop = runBash(
     `. ${shellQuote(lifecycleScript)}\n` +
@@ -218,7 +220,7 @@ posixTest('explicit force stop removes a listener and verifies the port is clean
   );
   assert.equal(stop.status, 0, stop.stderr);
   await waitUntil(() => spawnSync('kill', ['-0', String(listener.pid)]).status !== 0);
-  assert.notEqual(spawnSync('lsof', ['-ti', `tcp:${port}`, '-sTCP:LISTEN']).status, 0);
+  assert.equal(portHasListener(port), false);
 });
 
 posixTest('readiness fails immediately when the child exits before becoming ready', () => {

@@ -176,6 +176,9 @@ backend/data/agent-runtime/
 backend/data/self_improve/
 backend/data/knowledge-packs/
 /data/knowledge-packs/
+# Per-tenant partitions created by enterprise/OIDC mode, plus their uploaded
+# traces. Tenant ids are runtime-generated, so this cannot be an allowlist.
+backend/data/*/
 
 # ===================
 # Root-level uploads (anchored to repo root only; backend/uploads/ keeps its own rule above)
@@ -195,3 +198,7 @@ providers.json
 # Trace corpus private staging and materialized constructed outputs
 /Trace/real/.private/
 /Trace/.generated/
+
+# Rendered Dex config and extracted web assets: generated per host by
+# scripts/deploy-lan.sh and they carry a generated client secret.
+/deploy/.runtime/

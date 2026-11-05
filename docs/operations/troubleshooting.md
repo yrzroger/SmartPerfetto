@@ -125,7 +125,7 @@ chmod +x /absolute/path/to/trace_processor_shell
 - Frontend: `10000`
 - trace_processor RPC: `9100-9900`
 
-源码启动脚本只会停止 PID 元数据能够证明属于当前 checkout 的旧实例；如果端口由其他进程或另一个 checkout 占用，脚本会打印 `lsof` owner 并非零退出，不会直接杀掉它。
+源码启动脚本只会停止 PID 元数据能够证明属于当前 checkout 的旧实例；如果端口由其他进程或另一个 checkout 占用，脚本会打印 `ss` owner 并非零退出，不会直接杀掉它。
 
 先检查并停止当前 checkout 记录的服务：
 

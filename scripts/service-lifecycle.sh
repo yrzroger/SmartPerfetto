@@ -58,9 +58,6 @@ smartperfetto_process_executable() {
   if [ -L "/proc/$pid/exe" ]; then
     value=$(readlink "/proc/$pid/exe" 2>/dev/null || true)
   fi
-  if [ -z "$value" ]; then
-    value=$(lsof -a -p "$pid" -d txt -Fn 2>/dev/null | sed -n 's/^n//p' | head -n 1)
-  fi
   [ -n "$value" ] || return 1
   printf '%s\n' "$value"
 }
@@ -68,7 +65,7 @@ smartperfetto_process_executable() {
 smartperfetto_process_cwd() {
   local pid="$1"
   local value
-  value=$(lsof -a -p "$pid" -d cwd -Fn 2>/dev/null | sed -n 's/^n//p' | head -n 1)
+  value=$(readlink "/proc/$pid/cwd" 2>/dev/null || true)
   [ -n "$value" ] || return 1
   (
     cd "$value" 2>/dev/null || exit 1
@@ -349,12 +346,17 @@ smartperfetto_stop_owned_pid_file_for_allowed_cwds() {
 
 smartperfetto_listener_pids() {
   local port="$1"
-  lsof -ti "tcp:$port" -sTCP:LISTEN 2>/dev/null | sort -u
+  # ss reads /proc/net/tcp directly; lsof -i can hang on hosts with a very
+  # large fd address space, and its output duplicates ss for this query.
+  ss -ltnp "sport = :$port" 2>/dev/null \
+    | grep -oE 'pid=[0-9]+' \
+    | cut -d= -f2 \
+    | sort -u
 }
 
 smartperfetto_show_port_owner() {
   local port="$1"
-  lsof -nP -iTCP:"$port" -sTCP:LISTEN 2>/dev/null || true
+  ss -ltnp "sport = :$port" 2>/dev/null || true
 }
 
 smartperfetto_assert_port_available() {

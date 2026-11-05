@@ -225,8 +225,8 @@ echo "Checking environment..."
 require_command python3
 require_command npm
 require_command curl
-require_command lsof
 require_command pgrep
+require_command ss
 
 # Verify Perfetto's bundled tools exist (required for frontend dev mode)
 if [ ! -x "$PERFETTO_PNPM" ]; then

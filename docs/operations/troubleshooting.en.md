@@ -117,7 +117,7 @@ Default ports:
 
 Source launchers stop an old instance only when PID metadata proves it belongs
 to the current checkout. If another process or checkout owns a configured
-port, startup prints the `lsof` owner and exits non-zero instead of killing it.
+port, startup prints the `ss` owner and exits non-zero instead of killing it.
 
 First stop services recorded by this checkout:
 

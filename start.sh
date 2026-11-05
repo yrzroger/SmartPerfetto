@@ -338,8 +338,8 @@ smartperfetto_ensure_node "$PROJECT_ROOT"
 require_command node
 require_command npm
 require_command curl
-require_command lsof
 require_command pgrep
+require_command ss
 
 FRONTEND_SERVER="$PROJECT_ROOT/frontend/server.js"
 if [ ! -f "$FRONTEND_SERVER" ]; then

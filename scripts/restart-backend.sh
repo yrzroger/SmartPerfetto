@@ -24,7 +24,7 @@ DETACHED_PROCESS_LAUNCHER="$PROJECT_ROOT/scripts/launch-detached.mjs"
 . "$SERVICE_LIFECYCLE_HELPERS"
 
 smartperfetto_ensure_node "$PROJECT_ROOT"
-for required_command in curl lsof pgrep; do
+for required_command in curl pgrep ss; do
   if ! command -v "$required_command" >/dev/null 2>&1; then
     echo "ERROR: required command '$required_command' is not installed." >&2
     exit 1

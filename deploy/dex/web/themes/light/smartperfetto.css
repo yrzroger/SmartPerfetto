@@ -1,0 +1,206 @@
+/* SmartPerfetto overrides on top of Dex's light theme.
+ *
+ * Dex's defaults are tuned for a small embedded login form: 260px controls,
+ * 14px inputs, 20px heading. This deployment is one field on a wide screen, so
+ * the panel is wider, type is larger, and the page is centered vertically
+ * instead of sitting 60px from the top.
+ */
+
+:root {
+  --sp-accent: #2f67c8;
+  --sp-accent-hover: #2557ac;
+  --sp-text: #1f2937;
+  --sp-text-muted: #64748b;
+  --sp-border: #d5dbe3;
+  --sp-surface: #ffffff;
+  --sp-page: #f4f6f8;
+}
+
+.theme-body {
+  align-items: center;
+  background-color: var(--sp-page);
+  color: var(--sp-text);
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* The navbar is a brand strip, not a full-width header bar with a stray logo. */
+.theme-navbar {
+  align-items: center;
+  background-color: transparent;
+  border-bottom: 0;
+  display: flex;
+  height: auto;
+  justify-content: center;
+  padding: 40px 16px 0;
+  width: 100%;
+}
+
+.theme-navbar__logo-wrap {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  height: auto;
+  padding: 0;
+  width: auto;
+}
+
+.theme-navbar__logo {
+  border-radius: 8px;
+  height: 34px;
+  max-height: 34px;
+  width: 34px;
+}
+
+.sp-brand-name {
+  color: var(--sp-text);
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+/* Center the card in the space left under the brand strip. Dex pins
+ * min-width: 320px here, which overflows a narrow phone once the page padding
+ * is added; the card itself is the element that must stay above the minimum. */
+.dex-container {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 552px;
+  min-width: 0;
+  padding: 24px 16px 96px;
+  text-align: left;
+  width: 100%;
+}
+
+.theme-panel {
+  background-color: var(--sp-surface);
+  border: 1px solid var(--sp-border);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(23, 37, 58, 0.07);
+  padding: 40px 40px 32px;
+}
+
+/* Keep the panel usable at phone widths without clipping the controls. */
+@media (max-width: 480px) {
+  .theme-panel {
+    padding: 28px 20px 24px;
+  }
+
+  .theme-heading {
+    font-size: 22px;
+  }
+}
+
+.theme-heading {
+  color: var(--sp-text);
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin: 0 0 8px;
+}
+
+.theme-form-row {
+  margin: 20px 0 0;
+}
+
+/* Dex pins label and input to a fixed 260px centred box; let them fill the
+ * panel instead, which is where the extra width actually helps. */
+.theme-form-label {
+  color: var(--sp-text);
+  font-size: 15px;
+  font-weight: 550;
+  margin: 0 0 6px;
+  text-align: left;
+  width: auto;
+}
+
+.theme-form-input {
+  border: 1px solid var(--sp-border);
+  border-radius: 10px;
+  color: var(--sp-text);
+  display: block;
+  font-family: inherit;
+  font-size: 16px;
+  height: 48px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 10px 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+}
+
+.theme-form-input::placeholder {
+  color: #9aa6b2;
+}
+
+.theme-form-input:focus,
+.theme-form-input:active {
+  border-color: var(--sp-accent);
+  box-shadow: 0 0 0 3px rgba(47, 103, 200, 0.16);
+  outline: none;
+}
+
+.theme-btn--primary {
+  background-color: var(--sp-accent);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  height: 48px;
+  margin-top: 24px;
+  min-width: 0;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.theme-btn--primary:hover {
+  background-color: var(--sp-accent-hover);
+  color: #fff;
+}
+
+.theme-btn--primary:focus-visible {
+  outline: 2px solid var(--sp-accent);
+  outline-offset: 2px;
+}
+
+.theme-link-back {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.dex-subtle-text {
+  color: var(--sp-text-muted);
+  font-size: 14px;
+}
+
+.dex-subtle-text:hover {
+  color: var(--sp-accent);
+}
+
+.dex-error-box {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  color: #b91c1c;
+  font-size: 14px;
+  margin-top: 16px;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+/* One hint line under the card, since there is no password to remember. */
+.sp-hint {
+  color: var(--sp-text-muted);
+  font-size: 14px;
+  margin: 18px 2px 0;
+  text-align: center;
+}

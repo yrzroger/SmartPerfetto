@@ -84,5 +84,5 @@
   ],
   "ignoreExportsUsedInFile": true,
   "ignoreDependencies": ["@types/*"],
-  "ignoreBinaries": ["lsof", "pgrep", "ps", "shellcheck", "tsc"]
+  "ignoreBinaries": ["pgrep", "ps", "shellcheck", "ss", "tsc"]
 }
